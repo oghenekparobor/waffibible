@@ -23,18 +23,13 @@ class ReaderScreen extends StatefulWidget {
 class _ReaderScreenState extends State<ReaderScreen> {
   // ignore: unused_element
   List<InlineSpan> _flattenTextSpans(List<InlineSpan> iterable) {
-    return iterable
-        // ignore: deprecated_member_use
-        .expand((InlineSpan e) => e.children != null && e.children.length > 0
-            // ignore: deprecated_member_use
-            ? _flattenTextSpans(e.children.whereType<InlineSpan>().toList())
-            : [e])
-        .toList();
+    return iterable.toList();
   }
 
   @override
   void initState() {
     super.initState();
+    
     Future.delayed(Duration.zero).then((value) {
       Provider.of<DatabaseProvider>(context, listen: false).getBooks();
     });
@@ -44,6 +39,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
   Widget build(BuildContext context) {
     final size = Provider.of<FontSizeProvider>(context);
     final db = Provider.of<DatabaseProvider>(context);
+
     return Scaffold(
       body: AnimatedContainer(
         duration: Duration(milliseconds: 500),
@@ -57,7 +53,6 @@ class _ReaderScreenState extends State<ReaderScreen> {
                     builder: (context, value, child) {
                       return Dismissible(
                         key: Key(value.currentBook),
-                        
                         onDismissed: (direction) {
                           if (direction == DismissDirection.endToStart) {
                             var dd = value.values;
